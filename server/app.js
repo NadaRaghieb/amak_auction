@@ -15,18 +15,21 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://amak-auction.vercel.app",
+      process.env.FRONTEND_URL,
     ],
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
 // health check
+
 app.get("/", (req, res) => {
   res.send("AMAK Auction API Running");
 });
+
 
 // routes
 app.use("/api/auth", authRoutes);
