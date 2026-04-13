@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://YOUR-FRONTEND-DOMAIN.vercel.app",
+      "https://amak-auction.vercel.app",
     ],
     credentials: true,
   })
