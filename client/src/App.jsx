@@ -28,7 +28,7 @@ import { useLanguage } from "./context/LanguageContext";
 import translations from "./i18n/translations";
 import API from "./api/axios";
 import logo from "./assets/amak-logo.jpeg";
-import Footer from "./components/footer";
+import Footer from "./components/Footer";
 
 function ProtectedRoute({ children }) {
   const { user, authLoading } = useAuth();
