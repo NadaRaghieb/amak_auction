@@ -31,6 +31,7 @@ const getDashboardStats = async (req, res) => {
     return res.status(500).json({
       message: "Server error while fetching dashboard stats",
       error: error.message,
+      
     });
   }
 };

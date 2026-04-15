@@ -5,13 +5,11 @@ const { Server } = require("socket.io");
 
 const app = require("./app");
 const connectDB = require("./config/db");
-// const checkEndedAuctions = require("./jobs/checkEndedAuctions");
+const checkEndedAuctions = require("./jobs/checkEndedAuctions");
 const {
   incrementViewer,
   decrementViewer,
 } = require("./utils/auctionViewerStore");
-
-connectDB();
 
 const server = http.createServer(app);
 
@@ -64,14 +62,30 @@ io.on("connection", (socket) => {
 
 app.set("io", io);
 
-// checkEndedAuctions();
-
-// setInterval(async () => {
-//   await checkEndedAuctions();
-// }, 1000);
-
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+    console.log("MongoDB connected successfully");
+
+    checkEndedAuctions();
+
+    setInterval(async () => {
+      try {
+        await checkEndedAuctions();
+      } catch (error) {
+        console.error("Scheduled checkEndedAuctions error:", error.message);
+      }
+    }, 5000);
+
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Server startup error:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
