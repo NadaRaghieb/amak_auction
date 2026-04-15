@@ -10,29 +10,25 @@ const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
-//CORS
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
       "https://amak-auction.vercel.app",
       "https://amak-auction-git-main-nadaraghiebs-projects.vercel.app",
-      "https://amak-auction-npkwyine6-nadaraghiebs-projects.vercel.app"
+      "https://amak-auction-npkwyine6-nadaraghiebs-projects.vercel.app",
     ],
     credentials: true,
   })
 );
 
-// مهم جدًا
 app.use(express.json());
 app.use(cookieParser());
 
-// health check
 app.get("/", (req, res) => {
   res.send("AMAK Auction API Running");
 });
 
-// routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auctions", auctionRoutes);
