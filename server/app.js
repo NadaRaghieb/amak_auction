@@ -15,7 +15,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://amak-auction.vercel.app", // رابط الفرونت
+      "https://amak-auction.vercel.app",
+      "https://amak-auction-git-main-nadaraghiebs-projects.vercel.app",
+      "https://amak-auction-npkwyine6-nadaraghiebs-projects.vercel.app"
     ],
     credentials: true,
   })
