@@ -12,18 +12,22 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://amak-auction.vercel.app",
-  "https://amak-auction-git-main-nadaraghiebs-projects.vercel.app",
-  "https://amak-auction-npkwyine6-nadaraghiebs-projects.vercel.app",
+  process.env.CLIENT_URL,
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
+
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app");
+
+      if (isAllowed) {
         return callback(null, true);
       }
+
       return callback(new Error(`CORS blocked for origin: ${origin}`));
     },
     credentials: true,
@@ -43,7 +47,6 @@ app.use("/api/auctions", auctionRoutes);
 app.use("/api/bids", bidRoutes);
 app.use("/api/admin", adminRoutes);
 
-// error handler
 app.use((err, req, res, next) => {
   console.error("App error:", err);
   res.status(500).json({
