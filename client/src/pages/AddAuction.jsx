@@ -266,14 +266,14 @@ function AddAuction() {
             <option value="closed">{t.closed}</option>
             <option value="sold">{t.sold}</option>
           </select>
-
+          <h4>Start Date</h4>
           <input
             name="auctionStart"
             type="datetime-local"
             value={formData.auctionStart}
             onChange={handleChange}
           />
-
+          <h4>End Date</h4>
           <input
             name="auctionEnd"
             type="datetime-local"

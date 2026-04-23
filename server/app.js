@@ -10,7 +10,7 @@ const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
-const allowedOrigins = [
+cconst allowedOrigins = [
   "http://localhost:5173",
   process.env.CLIENT_URL,
 ];
