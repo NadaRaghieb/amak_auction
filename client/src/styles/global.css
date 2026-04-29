@@ -168,6 +168,29 @@ textarea {
   font-size: 14px;
 }
 
+.nav-toggle {
+  display: none;
+  background: var(--amak-dark);
+  color: #fff;
+  font-size: 20px;
+  padding: 8px 12px;
+  line-height: 1;
+}
+
+.nav-actions-mobile {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-lang-desktop {
+  display: inline-flex;
+}
+
+.nav-lang-mobile {
+  display: none;
+}
+
 .section-title {
   margin-bottom: 20px;
   color: var(--amak-dark);
@@ -906,6 +929,7 @@ textarea {
     gap: 20px;
   }
 }
+
 @media (max-width: 900px) {
   .auction-details-layout {
     grid-template-columns: 1fr;
@@ -935,12 +959,37 @@ textarea {
   }
 
   .navbar-inner {
-    align-items: flex-start;
+    align-items: center;
+  }
+
+  .nav-actions-mobile {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-lang-mobile {
+    display: inline-flex;
+  }
+
+  .nav-lang-desktop {
+    display: none;
   }
 
   .nav-links {
+    display: none;
     width: 100%;
+    flex-direction: column;
     gap: 10px;
+    margin-top: 12px;
+  }
+
+  .nav-links.open {
+    display: flex;
   }
 
   .nav-links a,

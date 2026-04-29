@@ -72,6 +72,7 @@ function Navigation() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [profileSubmitting, setProfileSubmitting] = useState(false);
   const [passwordSubmitting, setPasswordSubmitting] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [profileForm, setProfileForm] = useState({
     name: user?.name || "",
@@ -94,6 +95,7 @@ function Navigation() {
 
   const handleLogout = () => {
     logout();
+    setMobileMenuOpen(false);
     navigate("/login");
   };
 
@@ -115,7 +117,9 @@ function Navigation() {
       setProfileSubmitting(true);
       const res = await API.put("/auth/profile", profileForm);
       toast.success(
-        res.data.message || t.profileUpdatedSuccessfully || "Profile updated successfully"
+        res.data.message ||
+          t.profileUpdatedSuccessfully ||
+          "Profile updated successfully"
       );
       await fetchMe();
       setShowProfileModal(false);
@@ -135,7 +139,9 @@ function Navigation() {
       setPasswordSubmitting(true);
       const res = await API.put("/auth/change-password", passwordForm);
       toast.success(
-        res.data.message || t.passwordChangedSuccessfully || "Password changed successfully"
+        res.data.message ||
+          t.passwordChangedSuccessfully ||
+          "Password changed successfully"
       );
       setPasswordForm({
         currentPassword: "",
@@ -160,42 +166,114 @@ function Navigation() {
     <>
       <header className="navbar">
         <div className="navbar-inner">
-          <Link to="/" className="nav-brand">
+          <Link
+            to="/"
+            className="nav-brand"
+            onClick={() => setMobileMenuOpen(false)}
+          >
             <img src={logo} alt="AMAK" className="nav-logo" />
           </Link>
 
-          <div className="nav-links">
-            <Link to="/">{t.navAuctions}</Link>
+          <div className="nav-actions-mobile">
+            <button
+              onClick={toggleLanguage}
+              className="btn-secondary nav-lang-mobile"
+              type="button"
+            >
+              {isArabic ? "EN" : "عربي"}
+            </button>
 
-            {!user && <Link to="/login">{t.navLogin}</Link>}
-            {!user && <Link to="/register">{t.navRegister}</Link>}
+            <button
+              className="nav-toggle"
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-label="Toggle navigation"
+            >
+              ☰
+            </button>
+          </div>
 
-            {user && <Link to="/my-bids">{t.navMyBids}</Link>}
+          <div className={`nav-links ${mobileMenuOpen ? "open" : ""}`}>
+            <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+              {t.navAuctions}
+            </Link>
 
-            {user?.role === "admin" && <Link to="/admin">{t.navDashboard}</Link>}
-            {user?.role === "admin" && (
-              <Link to="/admin/auctions">{t.navManageAuctions}</Link>
+            {!user && (
+              <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                {t.navLogin}
+              </Link>
             )}
-            {user?.role === "admin" && (
-              <Link to="/admin/bids">{t.navManageBids}</Link>
-            )}
-            {user?.role === "admin" && (
-              <Link to="/admin/auctions/new">{t.navAddBid}</Link>
+
+            {!user && (
+              <Link to="/register" onClick={() => setMobileMenuOpen(false)}>
+                {t.navRegister}
+              </Link>
             )}
 
             {user && (
-              <button className="btn-secondary" onClick={openProfileModal}>
+              <Link to="/my-bids" onClick={() => setMobileMenuOpen(false)}>
+                {t.navMyBids}
+              </Link>
+            )}
+
+            {user?.role === "admin" && (
+              <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>
+                {t.navDashboard}
+              </Link>
+            )}
+
+            {user?.role === "admin" && (
+              <Link
+                to="/admin/auctions"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t.navManageAuctions}
+              </Link>
+            )}
+
+            {user?.role === "admin" && (
+              <Link to="/admin/bids" onClick={() => setMobileMenuOpen(false)}>
+                {t.navManageBids}
+              </Link>
+            )}
+
+            {user?.role === "admin" && (
+              <Link
+                to="/admin/auctions/new"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t.navAddBid}
+              </Link>
+            )}
+
+            {user && (
+              <button
+                className="btn-secondary"
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openProfileModal();
+                }}
+              >
                 {t.editProfile || "Edit Profile"}
               </button>
             )}
 
             {user && (
-              <button className="btn-secondary" onClick={handleLogout}>
+              <button
+                className="btn-secondary"
+                type="button"
+                onClick={handleLogout}
+              >
                 {t.navLogout}
               </button>
             )}
 
-            <button onClick={toggleLanguage} className="btn-secondary">
+            <button
+              onClick={toggleLanguage}
+              className="btn-secondary nav-lang-desktop"
+              type="button"
+            >
               {isArabic ? "EN" : "عربي"}
             </button>
           </div>
@@ -224,7 +302,10 @@ function Navigation() {
                   type="email"
                   value={profileForm.email}
                   onChange={(e) =>
-                    setProfileForm((prev) => ({ ...prev, email: e.target.value }))
+                    setProfileForm((prev) => ({
+                      ...prev,
+                      email: e.target.value,
+                    }))
                   }
                 />
               </div>
@@ -234,7 +315,10 @@ function Navigation() {
                 <input
                   value={profileForm.phone}
                   onChange={(e) =>
-                    setProfileForm((prev) => ({ ...prev, phone: e.target.value }))
+                    setProfileForm((prev) => ({
+                      ...prev,
+                      phone: e.target.value,
+                    }))
                   }
                 />
               </div>
@@ -243,6 +327,7 @@ function Navigation() {
                 className="btn-primary"
                 onClick={handleProfileUpdate}
                 disabled={profileSubmitting}
+                type="button"
               >
                 {profileSubmitting
                   ? t.saving || "Saving..."
@@ -287,6 +372,7 @@ function Navigation() {
                 className="btn-primary"
                 onClick={handlePasswordChange}
                 disabled={passwordSubmitting}
+                type="button"
               >
                 {passwordSubmitting
                   ? t.saving || "Saving..."
@@ -298,6 +384,7 @@ function Navigation() {
               <button
                 className="btn-secondary"
                 onClick={() => setShowProfileModal(false)}
+                type="button"
               >
                 {t.close || "Close"}
               </button>
